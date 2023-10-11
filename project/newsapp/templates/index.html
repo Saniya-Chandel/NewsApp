@@ -1,0 +1,144 @@
+{% block content %}
+{%load static%}
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+   
+    <style>
+    /* Style the input field */
+    #myInput {
+      padding: 20px;
+      margin-top: -6px;
+      border: 0;
+      border-radius: 0;
+      background: #f1f1f1;
+    }
+    .custom-select {
+      min-width: 80px;
+      padding-right: 20px;
+    }
+    
+    select {
+      appearance: none;
+      /* safari */
+      -webkit-appearance: none;
+      /* other styles for aesthetics */
+      width: 15% !important;
+      font-size: 1.15rem;
+      padding: 0.675em 6em 0.675em 1em;
+      background-color: #fff;
+      border: 1px solid #caced1;
+      border-radius: 0.25rem;
+      color: #000;
+      cursor: pointer;
+    }
+    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#"> News Today</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+             
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'index' %}">Home </span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'index' %}?category=technology">Technology </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'index' %}?category=science">Science</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'index' %}?category=health">Health  </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'index' %}?category=business">Business <span class="sr-only">(current)</span></a>
+                </li>
+            
+
+            </ul>
+            <select id="filterx" class="custom-select" onchange="updateInputName()">
+              <option value="">Search By</option>
+              <option value="country">Country</option>
+              <option value="category">Category</option>
+              <option value="description">Description</option>
+              <option value="publishedAt">Date</option>
+
+          </select>
+            <form class="form-inline px-2 py-2 my-2 my-lg-0" action="" method="get">
+                <input class="form-control px-2 mr-sm-2"  type="text" id="searchInput" placeholder="Search here" aria-label="Search">
+                <input type="date" id="calendarInput" style="display: none;">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search">Search</button>
+                
+            </form>
+           </div>
+    </nav>
+
+    <div class="container my-3">
+        <h3>Top headlines from {{country}} <span class="badge badge-secondary">News Today</span></h3>
+        <form method="POST" action="{% url 'refresh_data' %}">
+          <input type="submit" value="Refresh News">
+      </form>
+        <hr>
+        <div class="accordion" id="newsAccordion"></div>
+    </div>
+    <div class="container">
+        <div class="row cardContainer">
+           {% for i in articles %}
+            <div class="col-md-6">
+               
+
+                    <div class="card rounded shadow-lg m-2" style="width: 25rem;">
+                        <img src="{{ i.urlToImage }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                        <p class="card-text">{{ i.author }}</p>
+                        <h5 class="card-title">{{ i.title }}</h5>
+                        <p class="card-title">{{ i.source.name }}</p>
+                        <p class="card-text">{{ i.description }}</p>
+                        <hr>
+                        <small>date: {{ i.publishedAt }}</small>
+                        <a href="{{ i.url }}" target="_blank" class="btn btn-success m-1">View News</a>
+                        </div>
+                    </div>
+                </div>
+                  {% endfor %}
+            </div>
+        </div>
+          
+
+   
+        <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS --> 
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+        </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+        </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+        </script>
+   
+      <script src="{% static 'script.js' %}"></script>
+   
+</body>
+</html>
+
+{% endblock %}
